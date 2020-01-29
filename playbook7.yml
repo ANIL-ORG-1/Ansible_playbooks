@@ -1,0 +1,14 @@
+---
+- name: Creating users and downloading files into users home dir
+  hosts: all
+  tasks:
+   - name: Create users
+     user:
+      name: "{{a}}"
+      password: "{{b}}"
+      home: "{{c}}"
+   - name: Downloading files
+     get_url:
+      url: "{{d}}"
+      dest: "{{e}}"
+...

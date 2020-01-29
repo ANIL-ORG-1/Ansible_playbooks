@@ -1,0 +1,29 @@
+---
+- name: Confuguring tomcat6
+  hosts: all
+  tasks:
+   - name: Install tomcat8
+     apt:
+      name: tomcat8
+      state: present
+   - name: copy tomcat-users.xml file
+     copy:
+      src: /home/ubuntu/tomcat-users.xml
+      dest: /etc/tomcat8
+   - name: change port of tomcat 
+     replace:
+      regexp: 8080
+      replace: 9090
+      path: /etc/tomcat8/server.xml
+   - name: restart tomcat8
+     service:
+      name: tomcat8
+      state: restarted
+   - name: Check url response of server1
+     uri:
+      url: http://172.31.92.93:9090
+      status_code: 200
+   - name: Check url response of server2
+     uri:
+      url: http://172.31.91.124:9090
+      status_code: 200

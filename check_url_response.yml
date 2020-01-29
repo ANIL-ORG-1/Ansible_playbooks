@@ -1,0 +1,9 @@
+---
+- name: check url response of tomcat on all amanaged nodes
+  uri:
+   url: "{{item}}"
+   status_code: 200
+  with_items:
+   - http://172.31.92.93:9090
+   - http://172.31.91.124:9090
+

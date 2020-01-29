@@ -1,0 +1,12 @@
+---
+- name: Implementing condtional statemenets(when)
+  hosts: all
+  vars:
+   - a: 20
+  tasks:
+   - name: Install firewalld
+     apt:
+      name: firewalld
+      state: present
+     when: a == 10
+

@@ -1,0 +1,16 @@
+---
+- name: Check if a directory is present
+  hosts: all
+  tasks:
+   - name: Check for a directory
+     stat:
+      path: /home/ubuntu/dir1
+     register: a
+   - name: display output of the above module
+     debug:
+      var: a
+   - name: Create a file called dir1
+     file:
+      name: /home/ubuntu/dir1
+      state: touch
+     when: a.stat.exists == false

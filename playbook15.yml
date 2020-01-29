@@ -1,0 +1,20 @@
+---
+- name: Install tomcat using apt and yum
+  hosts: all
+  tasks:
+   - block: 
+      - name: Install tomcat8 uisng apt
+        apt:
+         name: tomcat8
+         state: present
+     resuce:
+      - name: Install tomcat8 using yum 
+        yum:
+         name: tomcat8
+         state: present
+     always:
+      - name: Restart tomcat8
+        service:
+         name: tomcat8
+         state: restarted
+
