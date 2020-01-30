@@ -1,0 +1,54 @@
+---
+- name: Install required s/w on the server
+  hosts: all
+  tasks:
+   - name: Install s/w's
+     apt:
+      name: "{{item}}"
+      state: present
+     with_items:
+      - openjdk-8-jdk
+      - git
+      - maven
+      - tomcat8
+      - tomcat8-admin
+- name: Download the code and build the code
+  hosts: devserver
+  tasks:
+   - name: Continuous Download
+     git:
+      repo: https://github.com/intelliqittrainings/maven.git
+      dest: /home/ubuntu/mycode
+   - name: continuous Build
+     shell: cd /home/ubuntu/mycode;mvn package
+   - name: Fetch the artifact from devserver to controller
+     fetch:
+      src: /home/ubuntu/mycode/webapp/target/webapp.war
+      dest: /home/ubuntu
+- name: Deploy the artifact into qaserver and do automation testing
+  hosts: qaserver
+  tasks:
+   - name: Continuous Deployment
+     copy:
+      src: /home/ubuntu/172.31.40.107/home/ubuntu/mycode/webapp/target/webapp.war
+      dest: /var/lib/tomcat8/webapps/testapp.war 
+   - name: Downlaod the selenium test scripts
+     git: 
+      repo: https://github.com/intelliqittrainings/FunctionalTesting.git
+      dest: /home/ubuntu/testcode
+   - name: Execute the test scripts
+     shell: java -jar /home/ubuntu/testcode/testing.jar
+- name: Deploy into prod servers
+  hosts: prodserver
+  tasks:
+   - name: Continuous Delivery
+     copy: 
+      src: /home/ubuntu/172.31.40.107/home/ubuntu/mycode/webapp/target/webapp.war
+      dest: /var/lib/tomcat8/webapps/prodapp.war
+
+
+
+
+
+
+
