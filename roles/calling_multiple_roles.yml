@@ -1,0 +1,6 @@
+---
+- name: Call multiple mroles
+  hosts: all
+  roles:
+   - tomcat
+   - apache
